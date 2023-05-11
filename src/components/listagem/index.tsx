@@ -11,30 +11,36 @@ import {
   IconButton,
 } from '@mui/material'
 import { Formulario } from '../Formulario'
+import { Plus, Trash } from 'phosphor-react'
 
 moment.locale('pt-br')
 
+export interface Student {
+  id: number
+  name: string
+}
+
 export interface Pagamentos {
   id: number
-  alunoId: string
-  mes: string
-  valor: number
-  createAt: string
+  month: []
+  monthId: number
+  student: Student
+  studentId: number
 }
 
 export interface Aluno {
   id: string
   name: string
-  pagamentos: Pagamentos[]
+  payments: Pagamentos[]
 }
 
 export const Listagem = () => {
   const [openDialogForm, setOpenDialogForm] = useState<boolean>(false)
   const [listaAlunos, setListaAlunos] = useState<Aluno[]>([])
-  const [alunoSelecionado, setAlunoSelecionado] = useState<Aluno>({
+  const [monthSelected, setMonthSelected] = useState<Aluno>({
     id: '',
     name: '',
-    pagamentos: [],
+    payments: [],
   })
 
   const listagemAlunos = useCallback(() => {
@@ -45,6 +51,14 @@ export const Listagem = () => {
     })
   }, [])
 
+  const excluiAluno = (paymentId: number) => {
+    api.post('/excluiPagamento', { paymentId }).then((res) => {
+      if (res.status === 200) {
+        listagemAlunos()
+      }
+    })
+  }
+
   useEffect(() => {
     listagemAlunos()
   }, [listagemAlunos])
@@ -53,47 +67,16 @@ export const Listagem = () => {
     window.requestAnimationFrame(() => {})
   }, [])
 
-  function formataMes(mes: string) {
-    switch (mes) {
-      case '01':
-        return 'Janeiro'
-      case '02':
-        return 'Fevereiro'
-      case '03':
-        return 'Março'
-      case '04':
-        return 'Abril'
-      case '05':
-        return 'Maio'
-      case '06':
-        return 'Junho'
-      case '07':
-        return 'Julho'
-      case '08':
-        return 'Agosto'
-      case '09':
-        return 'Setembro'
-      case '10':
-        return 'Outubro'
-      case '11':
-        return 'Novembro'
-      case '12':
-        return 'Dezembro'
-      default:
-        break
-    }
-  }
-
   return (
     <Container>
       <Box>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Heading>Lista de Alunos</Heading>
+          <Heading>Meses</Heading>
         </div>
-        {listaAlunos.map((aluno) => {
+        {listaAlunos.map((month) => {
           return (
             <CardAluno
-              key={aluno.id}
+              key={month.id}
               style={{
                 backgroundColor: '#1b8760',
               }}
@@ -102,7 +85,7 @@ export const Listagem = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Heading>{aluno.name}</Heading>
+                <Heading>{month.name}</Heading>
               </AccordionSummary>
               <AccordionDetails style={{ padding: '30px' }}>
                 <Tabela>
@@ -114,29 +97,33 @@ export const Listagem = () => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <Heading>Lista De Pagamentos | {aluno.name}</Heading>
+                      <Heading>
+                        Lista de alunos que fizeram o pagamento em {month.name}
+                      </Heading>
                       <IconButton
+                        title="Adicionar novo pagamento"
                         onClick={() => {
-                          setAlunoSelecionado(aluno)
+                          setMonthSelected(month)
                           setOpenDialogForm(true)
                         }}
                       >
-                        <Heading>+</Heading>
+                        <Plus color="white" />
                       </IconButton>
                     </div>
-                    <tr>
-                      <th style={{ borderRight: 'none' }}>Mês</th>
-                      <th>Valor</th>
-                    </tr>
                   </thead>
                   <tbody>
-                    {aluno.pagamentos.map((pagamento) => {
+                    {month.payments.map((pagamento) => {
                       return (
                         <tr key={pagamento.id}>
-                          <td style={{ borderRight: 'none' }}>
-                            {formataMes(pagamento.mes)}
+                          <td>{pagamento.student?.name}</td>
+                          <td>
+                            <IconButton
+                              onClick={() => excluiAluno(pagamento.id)}
+                              title="Excluir pagamento"
+                            >
+                              <Trash color="white" />
+                            </IconButton>
                           </td>
-                          <td>R${pagamento.valor},00</td>
                         </tr>
                       )
                     })}
@@ -154,7 +141,7 @@ export const Listagem = () => {
         fullWidth
       >
         <Formulario
-          alunoSelecionado={alunoSelecionado}
+          monthSelected={monthSelected}
           listagemAlunos={listagemAlunos}
           setOpenDialogForm={setOpenDialogForm}
         />

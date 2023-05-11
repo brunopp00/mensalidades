@@ -19,7 +19,7 @@ export const CardAluno = styled(Accordion, {
 export const Tabela = styled('table', {
   width: '100%',
   borderRadius: '10px',
-  backgroundColor: '$gray600',
+  backgroundColor: '$ignite700',
   padding: '$2',
   textAlign: 'start',
   fontFamily: 'Roboto, sans-serif',
@@ -30,13 +30,12 @@ export const Tabela = styled('table', {
   },
 
   td: {
-    border: '1px solid black',
+    borderBottom: '1px solid $white',
     padding: '8px',
     textAlign: 'left',
   },
 
   th: {
-    border: '1px solid black',
     padding: '8px',
     textAlign: 'left',
   },
