@@ -9,14 +9,30 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@design-system-brunopp00/react": "^2.1.0",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.13.0",
+    "@prisma/client": "^4.14.0",
     "@types/node": "20.1.1",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.1",
+    "formik": "^2.2.9",
+    "formik-material-ui": "^4.0.0-alpha.2",
+    "moment": "^2.29.4",
+    "mongodb": "^5.4.0",
     "next": "13.4.1",
+    "phosphor-icons": "^1.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^1.2.0",
+    "prisma": "^4.14.0"
   }
 }
