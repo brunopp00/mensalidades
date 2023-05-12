@@ -9,6 +9,9 @@ export default async function handler(
 
   if (method === 'POST') {
     const meses = await prisma.month.findMany({
+      orderBy: {
+        name: 'asc',
+      },
       select: {
         payments: {
           select: {
