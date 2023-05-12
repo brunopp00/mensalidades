@@ -58,11 +58,13 @@ export const Listagem = () => {
   }, [])
 
   const excluiAluno = (paymentId: number) => {
-    api.post('/excluiPagamento', { paymentId }).then((res) => {
-      if (res.status === 200) {
-        listagemAlunos()
-      }
-    })
+    if (window.localStorage.getItem('senhaAdm') === 'amandalinda1805') {
+      api.post('/excluiPagamento', { paymentId }).then((res) => {
+        if (res.status === 200) {
+          listagemAlunos()
+        }
+      })
+    }
   }
 
   const handlePlus = (month: Aluno) => {
