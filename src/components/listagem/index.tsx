@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import { Formulario } from '../Formulario'
 import { Plus, Trash } from 'phosphor-react'
+import Head from 'next/head'
 
 moment.locale('pt-br')
 
@@ -94,6 +95,9 @@ export const Listagem = () => {
 
   return (
     <Container>
+      <Head>
+        <title>Mensalidades</title>
+      </Head>
       <Box>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Heading>Meses</Heading>
