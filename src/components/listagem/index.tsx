@@ -179,6 +179,8 @@ export const Listagem = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                fullWidth
+                type="password"
                 label="Senha"
                 variant="outlined"
                 margin="dense"
