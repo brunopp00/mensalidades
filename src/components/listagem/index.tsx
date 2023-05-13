@@ -97,9 +97,7 @@ export const Listagem = () => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <Heading>
-                        Lista de alunos que fizeram o pagamento em {month.name}
-                      </Heading>
+                      <Heading>Lista de pagamentos de {month.name}</Heading>
                       <IconButton
                         title="Adicionar novo pagamento"
                         onClick={() => {
