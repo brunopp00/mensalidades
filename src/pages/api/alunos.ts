@@ -11,6 +11,11 @@ export default async function handler(
     const meses = await prisma.month.findMany({
       select: {
         payments: {
+          orderBy: {
+            student: {
+              name: 'asc',
+            },
+          },
           select: {
             id: true,
             month: true,

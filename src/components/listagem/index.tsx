@@ -3,15 +3,20 @@ import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { CardAluno, Container, Tabela } from './styles'
 import moment from 'moment'
 import 'moment/locale/pt-br'
-import { Box, Heading } from '@design-system-brunopp00/react'
+import { Box, Button, Heading } from '@design-system-brunopp00/react'
 import {
   AccordionDetails,
   AccordionSummary,
   Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
   IconButton,
+  TextField,
 } from '@mui/material'
 import { Formulario } from '../Formulario'
 import { Plus, Trash } from 'phosphor-react'
+import Head from 'next/head'
 
 moment.locale('pt-br')
 
@@ -42,6 +47,8 @@ export const Listagem = () => {
     name: '',
     payments: [],
   })
+  const [password, setPassword] = useState<string>('')
+  const [openModalPassword, setOpenModalPassword] = useState<boolean>(false)
 
   const listagemAlunos = useCallback(() => {
     api.post<Aluno[]>('/alunos').then((res) => {
@@ -52,11 +59,30 @@ export const Listagem = () => {
   }, [])
 
   const excluiAluno = (paymentId: number) => {
-    api.post('/excluiPagamento', { paymentId }).then((res) => {
-      if (res.status === 200) {
-        listagemAlunos()
-      }
-    })
+    if (window.localStorage.getItem('senhaAdm') === 'amandalinda1805') {
+      api.post('/excluiPagamento', { paymentId }).then((res) => {
+        if (res.status === 200) {
+          listagemAlunos()
+        }
+      })
+    }
+  }
+
+  const handlePlus = (month: Aluno) => {
+    if (window.localStorage.getItem('senhaAdm') === 'amandalinda1805') {
+      setMonthSelected(month)
+      setOpenDialogForm(true)
+      setOpenModalPassword(false)
+    } else {
+      setOpenModalPassword(true)
+      setMonthSelected(month)
+    }
+  }
+
+  const handleClick = async () => {
+    await window.localStorage.setItem('senhaAdm', password)
+
+    handlePlus(monthSelected)
   }
 
   useEffect(() => {
@@ -69,6 +95,9 @@ export const Listagem = () => {
 
   return (
     <Container>
+      <Head>
+        <title>Mensalidades</title>
+      </Head>
       <Box>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Heading>Meses</Heading>
@@ -100,10 +129,7 @@ export const Listagem = () => {
                       <Heading>Lista de pagamentos de {month.name}</Heading>
                       <IconButton
                         title="Adicionar novo pagamento"
-                        onClick={() => {
-                          setMonthSelected(month)
-                          setOpenDialogForm(true)
-                        }}
+                        onClick={() => handlePlus(month)}
                       >
                         <Plus color="white" />
                       </IconButton>
@@ -143,6 +169,34 @@ export const Listagem = () => {
           listagemAlunos={listagemAlunos}
           setOpenDialogForm={setOpenDialogForm}
         />
+      </Dialog>
+      <Dialog
+        open={openModalPassword}
+        onClose={() => setOpenModalPassword(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>
+          Digitar senha do administrador para adicionar um novo pagamento{' '}
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type="password"
+                label="Senha"
+                variant="outlined"
+                margin="dense"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button onClick={handleClick}>Adicionar</Button>
+            </Grid>
+          </Grid>
+        </DialogContent>
       </Dialog>
     </Container>
   )
